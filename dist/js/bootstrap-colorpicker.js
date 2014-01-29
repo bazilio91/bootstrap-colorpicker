@@ -672,8 +672,8 @@
                 if (this.options.inline !== false) {
                     return false;
                 }
-                var type = this.container[0] !== document.body ? 'position' : 'offset';
-                var offset = this.component ? this.component[type]() : this.element[type]();
+                var type = 'offset',
+                    offset = this.component ? this.component[type]() : this.element[type]();
                 this.picker.css({
                     top: offset.top + (this.component ? this.component.outerHeight() : this.element.outerHeight()),
                     left: offset.left
