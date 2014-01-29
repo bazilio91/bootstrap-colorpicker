@@ -228,6 +228,7 @@
             val = val || this.color.toString(this.format);
             if (this.input !== false) {
                 this.input.prop('value', val);
+                this.input.trigger('change');
             }
             return val;
         },
