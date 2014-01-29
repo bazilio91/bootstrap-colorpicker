@@ -115,7 +115,6 @@ module.exports = function(grunt) {
     grunt.registerTask('default', [
         'clean',
         'recess',
-        'jsbeautifier:srcFiles',
         'combine',
         'jsbeautifier:distFiles',
         'uglify',

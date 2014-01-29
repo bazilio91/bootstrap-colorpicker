@@ -9,16 +9,15 @@
  * @todo Update DOCS
  */
 
-(function( factory ) {
+(function (factory) {
     "use strict";
-    if(typeof define === 'function' && define.amd) {
-            define(['jquery'], factory);
-    }
-    else if(window.jQuery && !window.jQuery.fn.colorpicker) {
-            factory(window.jQuery);
+    if (typeof define === 'function' && define.amd) {
+        define(['jquery'], factory);
+    } else if (window.jQuery && !window.jQuery.fn.colorpicker) {
+        factory(window.jQuery);
     }
 }
-(function($) {
+(function ($) {
     'use strict';
 
     '{{color}}';
@@ -79,7 +78,7 @@
             '</div>'
     };
 
-    var Colorpicker = function(element, options) {
+    var Colorpicker = function (element, options) {
         this.element = $(element).addClass('colorpicker-element');
         this.options = $.extend({}, defaults, this.element.data(), options);
         this.component = this.options.component;
@@ -146,7 +145,7 @@
         }
         this.update();
 
-        $($.proxy(function() {
+        $($.proxy(function () {
             this.element.trigger('create');
         }, this));
     };
@@ -157,7 +156,7 @@
 
     Colorpicker.prototype = {
         constructor: Colorpicker,
-        destroy: function() {
+        destroy: function () {
             this.picker.remove();
             this.element.removeData('colorpicker').off('.colorpicker');
             if (this.input !== false) {
@@ -171,7 +170,7 @@
                 type: 'destroy'
             });
         },
-        reposition: function() {
+        reposition: function () {
             if (this.options.inline !== false) {
                 return false;
             }
@@ -182,7 +181,7 @@
                 left: offset.left
             });
         },
-        show: function(e) {
+        show: function (e) {
             if (this.isDisabled()) {
                 return false;
             }
@@ -205,7 +204,10 @@
                 color: this.color
             });
         },
-        hide: function() {
+        hide: function (e) {
+            if (e.type === 'mousedown' && e.target === this.element[0]) {
+                return;
+            }
             this.picker.addClass('colorpicker-hidden').removeClass('colorpicker-visible');
             $(window).off('resize.colorpicker', this.reposition);
             $(document).off({
@@ -217,19 +219,19 @@
                 color: this.color
             });
         },
-        updateData: function(val) {
-            val = val ||  this.color.toString(this.format);
+        updateData: function (val) {
+            val = val || this.color.toString(this.format);
             this.element.data('color', val);
             return val;
         },
-        updateInput: function(val) {
-            val = val ||  this.color.toString(this.format);
+        updateInput: function (val) {
+            val = val || this.color.toString(this.format);
             if (this.input !== false) {
                 this.input.prop('value', val);
             }
             return val;
         },
-        updatePicker: function(val) {
+        updatePicker: function (val) {
             if (val !== undefined) {
                 this.color = new Color(val);
             }
@@ -256,8 +258,8 @@
             this.picker.find('.colorpicker-color, .colorpicker-color div').css('backgroundColor', this.color.toString(this.format));
             return val;
         },
-        updateComponent: function(val) {
-            val = val ||  this.color.toString(this.format);
+        updateComponent: function (val) {
+            val = val || this.color.toString(this.format);
             if (this.component !== false) {
                 var icn = this.component.find('i').eq(0);
                 if (icn.length > 0) {
@@ -272,7 +274,7 @@
             }
             return val;
         },
-        update: function(force) {
+        update: function (force) {
             var val = this.updateComponent();
             if ((this.getValue(false) !== false) || (force === true)) {
                 // Update input/data only if the current value is not blank
@@ -283,7 +285,7 @@
             return val;
 
         },
-        setValue: function(val) { // set color manually
+        setValue: function (val) { // set color manually
             this.color = new Color(val);
             this.update();
             this.element.trigger({
@@ -292,7 +294,7 @@
                 value: val
             });
         },
-        getValue: function(defaultValue) {
+        getValue: function (defaultValue) {
             defaultValue = (defaultValue === undefined) ? '#000000' : defaultValue;
             var val;
             if (this.hasInput()) {
@@ -306,23 +308,23 @@
             }
             return val;
         },
-        hasInput: function() {
+        hasInput: function () {
             return (this.input !== false);
         },
-        isDisabled: function() {
+        isDisabled: function () {
             if (this.hasInput()) {
                 return (this.input.prop('disabled') === true);
             }
             return false;
         },
-        disable: function() {
+        disable: function () {
             if (this.hasInput()) {
                 this.input.prop('disabled', true);
                 return true;
             }
             return false;
         },
-        enable: function() {
+        enable: function () {
             if (this.hasInput()) {
                 this.input.prop('disabled', false);
                 return true;
@@ -334,7 +336,7 @@
             left: 0,
             top: 0
         },
-        mousedown: function(e) {
+        mousedown: function (e) {
             e.stopPropagation();
             e.preventDefault();
 
@@ -370,7 +372,7 @@
             }
             return false;
         },
-        mousemove: function(e) {
+        mousemove: function (e) {
             e.stopPropagation();
             e.preventDefault();
             var left = Math.max(
@@ -403,7 +405,7 @@
             });
             return false;
         },
-        mouseup: function(e) {
+        mouseup: function (e) {
             e.stopPropagation();
             e.preventDefault();
             $(document).off({
@@ -412,7 +414,7 @@
             });
             return false;
         },
-        keyup: function(e) {
+        keyup: function (e) {
             if ((e.keyCode === 38)) {
                 if (this.color.value.a < 1) {
                     this.color.value.a = Math.round((this.color.value.a + 0.01) * 100) / 100;
@@ -442,10 +444,10 @@
 
     $.colorpicker = Colorpicker;
 
-    $.fn.colorpicker = function(option) {
+    $.fn.colorpicker = function (option) {
         var pickerArgs = arguments;
 
-        return this.each(function() {
+        return this.each(function () {
             var $this = $(this),
                 inst = $this.data('colorpicker'),
                 options = ((typeof option === 'object') ? option : {});
